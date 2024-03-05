@@ -1,0 +1,84 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 30px;
+  color: #333;
+}
+
+p {
+  text-align: center;
+  color: #333;
+}
+
+#error-message {
+  color: red;
+}
+
+#respuesta-correcta {
+  display: none;
+  text-align: center;
+  color: #333;
+  font-weight: bold;
+}
+
+#guess-input {
+  display: block;
+  margin: 0 auto;
+  padding: 10px;
+  font-size: 18px;
+  width: 250px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+#guess-button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: #0CBABA;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#guess-button:hover {
+  background-color: #088e8b;
+}
+
+#grid {
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.letter {
+  border: 2px solid #ccc;
+  padding: 5px;
+  margin: 5px;
+  width: 20px;
+  max-width: 20px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  color: #333;
+  border-radius: 5px;
+  word-wrap: break-word;
+}
+
+.row {
+  margin-bottom: 10px;
+}
+
+.input-area {
+  margin: 30px auto;
+  text-align: center;
+}
