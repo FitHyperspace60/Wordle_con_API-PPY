@@ -1,84 +1,190 @@
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f2f2f2;
-  margin: 0;
-  padding: 0;
+
+    background-color: #494848;;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
-h1 {
-  text-align: center;
-  margin-top: 30px;
-  color: #333;
+header {
+
+    width: 100%;
+    background-color: #333;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    border-bottom: 2px solid #000000;
+    text-align: center;
 }
 
-p {
-  text-align: center;
-  color: #333;
+header h1 {
+
+    color: #fff;
+    font-size: 2em;
+    margin: 0;
+    padding: 10px;
 }
 
-#error-message {
-  color: red;
+.conjuntoPalabras {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px 0;
 }
 
-#respuesta-correcta {
-  display: none;
-  text-align: center;
-  color: #333;
-  font-weight: bold;
+.palabra {
+
+    display: flex;
+    justify-content: center;
+    margin: 5px 0;
 }
 
-#guess-input {
-  display: block;
-  margin: 0 auto;
-  padding: 10px;
-  font-size: 18px;
-  width: 250px;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  outline: none;
+.letra {
+
+    transition: .5s, color .10s;
+    -webkit-transition: .5s, color .10s;
+    -moz-transition: .5s, color .10s;
+    
+    display: flex;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+    font-size: x-large;
+    border: 2px solid #000;
+    border-radius: 5px;
 }
 
-#guess-button {
-  display: block;
-  margin: 20px auto;
-  padding: 10px 20px;
-  font-size: 18px;
-  background-color: #0CBABA;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.letra.seleccionada{
+
+    display: flex;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+    font-size: x-large;
+    border: 2px solid #779097;
+    background-color: #787575;
+    border-radius: 5px;
+}
+.letra.correcto{
+
+    transform: rotateX(360deg);
+    -webkit-transform: rotateX(360deg);
+    -moz-transform: rotateX(360deg);
+    
+
+    color:#000000;
+    display: flex;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+    font-size: x-large;
+    border: 2px solid #779097;
+    background-color: #79b851;
+    border-radius: 5px;
 }
 
-#guess-button:hover {
-  background-color: #088e8b;
+.letra.parecido {
+
+    transform: rotateX(360deg);
+    -webkit-transform: rotateX(360deg);
+    -moz-transform: rotateX(360deg);
+    
+    color:#000000;
+    display: flex;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+    font-size: x-large;
+    border: 2px solid #779097;
+    background-color: #f3c237;
 }
 
-#grid {
-  margin: 0 auto;
-  width: fit-content;
+.letra.ninguno {
+    transform: rotateX(360deg);
+    -webkit-transform: rotateX(360deg);
+    -moz-transform: rotateX(360deg);
+    
+    color:#000000;
+    display: flex;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+    font-size: x-large;
+    border: 2px solid #779097;
+    background-color: #8e8e95;
 }
 
-.letter {
-  border: 2px solid #ccc;
-  padding: 5px;
-  margin: 5px;
-  width: 20px;
-  max-width: 20px;
-  text-align: center;
-  display: inline-block;
-  font-size: 16px;
-  color: #333;
-  border-radius: 5px;
-  word-wrap: break-word;
+#resultado {
+    
+    display: none;
 }
 
-.row {
-  margin-bottom: 10px;
+#resultado.ganar{
+
+    display: block;
+    position: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #79b851;
+    font-size: 20px;
 }
 
-.input-area {
-  margin: 30px auto;
-  text-align: center;
+#resultado.perder{
+
+    display: block;
+    position: flex;
+    flex-direction: column;
+    align-items: center;
+    color: red;
+    font-size: 20px;
 }
+
+[contenteditable="true"]:focus {
+
+    outline: none;
+    caret-color: transparent;
+}
+
+#reiniciar{
+
+    display: none;
+}
+
+#reiniciar.activo{
+
+    position: flex;
+    display: block;
+    font-size: 3vh;
+    margin-top: 2vh;
+    border-radius: 5px;
+    border: #000000 solid 3px;
+    background-color: #737373;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 5%;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+

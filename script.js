@@ -1,88 +1,119 @@
-let intentos = 6;
-const API = "https://random-word-api.vercel.app/api?words=1&length=5&type=uppercase";
-const button = document.getElementById("guess-button");
-const input = document.getElementById("guess-input");
-const GRID = document.getElementById("grid");
-const ROW = document.createElement('div');
-ROW.className = 'row';
+const botonRefrescar = document.getElementById('reiniciar');
+const url = 'https://random-word-api.herokuapp.com/word?lang=es&length=5';
+let respuesta = null;
+let respuestaImprimir = null;
 
-button.addEventListener("click", intentar);
-
-fetch(API).then((response)=>{
-    response.json().then((body)=>{
-        palabra=(body[0]).toUpperCase();
+fetch(url)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+    return response.json();
     })
-})
 
-function intentar(){
-    const INTENTO = leerIntento();
-    const errorMensaje = document.getElementById('error-message');
-    if (INTENTO.length !== 5) {
-        errorMensaje.textContent = "La palabra introducida debe tener 5 letras.";
-        return;
-    }
-    errorMensaje.textContent = "";
-    if (INTENTO === palabra ) {
-        terminar("<h1>¡GANASTE!😀</h1>");
-        const nuevaFila = document.createElement('div');
-        nuevaFila.className = 'row';
-        for (let i = 0; i < palabra.length; i++){
-            const SPAN = document.createElement('span');
-            SPAN.className = 'letter';
-            SPAN.innerHTML = palabra[i];
-            SPAN.style.backgroundColor = "#79b851";
-            nuevaFila.appendChild(SPAN);
+    .then(data => {
+        const removeAccents = (str) => {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
-        GRID.appendChild(nuevaFila);
-        return;
-    }
-    const nuevaFila = document.createElement('div');
-    nuevaFila.className = 'row';
-    const letrasCorrectas = new Set();
-    const letrasEnPalabra = new Set();
-    for (let i = 0; i < palabra.length; i++){
-        if (INTENTO[i] === palabra[i]){
-            letrasCorrectas.add(i);
+    respuesta = data[0];
+    respuesta = respuesta.toUpperCase();
+    respuesta = removeAccents(respuesta);
+    respuestaImprimir = respuesta;
+    respuesta =  respuesta.split('');
+    console.log(respuestaImprimir); 
+    })
+
+    .catch(err => {
+    console.error("Hubo un problema con la solicitud:", err);
+    });
+
+var palabraIngresada = [];
+var resultado = document.getElementById('resultado');
+var letra_completada=[];
+
+const palabras = document.querySelectorAll(' .palabra');
+var intentos = 0;
+palabras[0].focus();
+
+palabras.forEach((palabra) => {
+    const letras = palabra.querySelectorAll('.letra');
+    let indice = 0;
+    
+    palabra.addEventListener('keydown', function(event) { 
+        
+        event.preventDefault();
+        if ((/^[a-zA-Z]$/).test(event.key)) {
+            if (indice < letras.length) {
+                
+                letras[indice].innerText = event.key.toUpperCase();
+                letras[indice].classList.add('seleccionada'); 
+                palabraIngresada.push(event.key.toUpperCase());
+                indice++;
+            }
+
+        }else if(event.key == 'Backspace') {
+            if (indice > 0) {
+                indice--;
+                letras[indice].innerText = '' ;
+                letras[indice].classList.remove('seleccionada');
+                palabraIngresada.pop(); 
+            }
+
+        }else  if(event.key == 'Enter') {
+            if(indice == 5){
+                    intentos++;
+                    let correctos =0;
+                    for (let i = 0; i < letras.length; i++) {
+                        if(letras[i].innerText == respuesta[i] ){
+                            letras[i].classList.remove('seleccionada');
+                            letras[i].classList.add('correcto');
+                            correctos++;
+                            if(correctos == 5){
+                                resultado.classList.add('ganar');
+                                resultado.innerHTML = "¡GANASTE!😀";
+                                botonRefrescar.classList.add('activo');
+                                botonRefrescar.focus();
+                                return;
+                            }
+                        
+                        }else if (respuesta.includes(letras[i].innerText)){
+                            letras[i].classList.remove('seleccionada');
+                            letras[i].classList.remove('ninguno');
+                            letras[i].classList.add('parecido');
+
+                        }else{ 
+                            letras[i].classList.remove('seleccionada');
+                            letras[i].classList.add('ninguno');
+                        }
+                        
+                    }
+                    if(intentos>5){
+                        resultado.classList.add('perder');
+                        resultado.innerHTML = `¡PERDISTE!😖. RESPUESTA: ${respuestaImprimir}`;
+                        botonRefrescar.classList.add('activo');
+                        botonRefrescar.focus();
+                        return;
+                    }
+                    palabras[intentos-1].setAttribute('contenteditable','false');
+                    palabras[intentos].setAttribute('contenteditable','true');
+                    palabras[intentos].focus();
+            }
         }
-        letrasEnPalabra.add(palabra[i]);
-    }
-    for (let i = 0; i < palabra.length; i++){
-        const SPAN = document.createElement('span');
-        SPAN.className = 'letter';
-        if (letrasCorrectas.has(i)){
-            SPAN.innerHTML = INTENTO[i];
-            SPAN.style.backgroundColor = "#79b851";
-        } else if( letrasEnPalabra.has(INTENTO[i]) ) {
-            SPAN.innerHTML = INTENTO[i];
-            SPAN.style.backgroundColor = "#f3c237";
-        } else {
-            SPAN.innerHTML = INTENTO[i];
-            SPAN.style.backgroundColor = "#a4aec4";
+    });
+});
+
+botonRefrescar.addEventListener('click', () => {
+    location.reload();
+});
+
+function elementosComunes(array1, array2) {
+    var elementosComunesArray = [];
+
+    for (var i = 0; i < array1.length; i++) {
+        if (array2.includes(array1[i]) && !elementosComunesArray.includes(array1[i])) {
+            elementosComunesArray.push(array1[i]);
         }
-        nuevaFila.appendChild(SPAN);
     }
-    GRID.appendChild(nuevaFila);
-    intentos--;
-    if (intentos === 0){
-        terminar("<h1>¡PERDISTE!😖</h1>");
-    }
+
+    return elementosComunesArray;
 }
-
-function leerIntento(){
-    let intento = input.value;
-    intento = intento.toUpperCase(); 
-    return intento;
-}
-
-function terminar(mensaje){
-    input.disabled = true;
-    button.disabled = true;
-    let contenedor = document.getElementById('guesses');
-    contenedor.innerHTML = mensaje;
-    const respuestaParrafo = document.getElementById('respuesta-correcta');
-    respuestaParrafo.style.display = 'block';
-    const respuestaSpan = document.getElementById('respuesta');
-    respuestaSpan.textContent = palabra;
-}
-
-
